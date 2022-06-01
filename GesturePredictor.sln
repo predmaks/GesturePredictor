@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GesturePredictor", "GesturePredictor\GesturePredictor.csproj", "{6CA1695E-3917-4E83-8799-45FE58B416CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GesturePredictor.Tests", "GesturePredictor.Tests\GesturePredictor.Tests.csproj", "{FC896AEC-7614-48DB-9B07-A66348FA6497}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CA1695E-3917-4E83-8799-45FE58B416CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CA1695E-3917-4E83-8799-45FE58B416CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CA1695E-3917-4E83-8799-45FE58B416CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CA1695E-3917-4E83-8799-45FE58B416CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC896AEC-7614-48DB-9B07-A66348FA6497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC896AEC-7614-48DB-9B07-A66348FA6497}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC896AEC-7614-48DB-9B07-A66348FA6497}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC896AEC-7614-48DB-9B07-A66348FA6497}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D7CD65DA-5D27-4870-86C2-73417DD526C6}
+	EndGlobalSection
+EndGlobal
