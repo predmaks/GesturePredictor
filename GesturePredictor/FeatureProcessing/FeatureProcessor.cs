@@ -3,6 +3,7 @@
     public class FeatureProcessor : IFeatureProcessor
     {
         private Dictionary<FeatureTypes, Func<double[], double>> featureTypeFuncMappings;
+        private Dictionary<string, int> labels;
 
         public FeatureProcessor()
         {
@@ -12,7 +13,7 @@
         public IEnumerable<FeatureRecord> ExtractFeatures(IEnumerable<RawDataSnapshot> input, List<FeatureTypes> featureTypes)
         {
             var normalizedDataGrouped = input.GroupBy(
-                emg => emg.GestureId, (key, g) => new { GestureId = key, Records = g.ToList() });
+                emg => (emg.GestureId, emg.GestureValue), (key, g) => new { Gesture = key, Records = g.ToList() });
 
             var features = new List<FeatureRecord>();
 
@@ -23,7 +24,8 @@
                     var feature = new FeatureRecord
                     {
                         FeatureType = funcMapping.Key,
-                        GestureId = gestureGroup.GestureId
+                        GestureId = gestureGroup.Gesture.GestureId,
+                        GestureValue = gestureGroup.Gesture.GestureValue
                     };
 
                     var sensorValuesCount = gestureGroup.Records.ElementAt(0).SensorValues.Count();
@@ -40,12 +42,61 @@
                 }
             }
 
+            // TODO: initialize constructor with dataset, and move this to constructor
+            var gestureValues = input.Select(l => l.GestureValue).Distinct().ToList();
+            labels = EncodeCategoricalLabels(gestureValues);
+
             return features;
         }
 
-        public IEnumerable<RawDataSnapshot> MergeFeatures()
+        public IEnumerable<FeatureTransposed> MergeFeatures(IEnumerable<FeatureRecord> input1, IEnumerable<FeatureRecord> input2)
         {
-            throw new NotImplementedException();
+            var features = from emg in input1
+                           join imu in input2
+                           on new { emg.GestureId, emg.FeatureType } equals new { imu.GestureId, imu.FeatureType } //into details
+                           //from d in details
+                           select new
+                           {
+                               emg.GestureId,
+                               GestureValue = emg.GestureValue,
+                               emg.FeatureType,
+                               EmgVector = emg.SensorValues,
+                               ImuVector = imu.SensorValues
+                           };
+
+            var groups = features.GroupBy(f => new { f.GestureId, f.GestureValue }, (key, g) => new { KeyPair = key, Records = g });
+
+            var result = new List<FeatureTransposed>();
+
+            foreach (var featureGroup in groups)
+            {
+                var mavFeature = featureGroup.Records.SingleOrDefault(r => r.FeatureType == FeatureTypes.MeanAbsoluteValue);
+                var wlFeature = featureGroup.Records.SingleOrDefault(r => r.FeatureType == FeatureTypes.WaveformLength);
+                var rmsFeature = featureGroup.Records.SingleOrDefault(r => r.FeatureType == FeatureTypes.RootMeanSquare);
+                var varFeature = featureGroup.Records.SingleOrDefault(r => r.FeatureType == FeatureTypes.Variance);
+                var sscFeature = featureGroup.Records.SingleOrDefault(r => r.FeatureType == FeatureTypes.SlopeSignChange);
+
+                var featureVector = (mavFeature?.EmgVector ?? Enumerable.Empty<double>())
+                    .Concat(wlFeature?.EmgVector ?? Enumerable.Empty<double>())
+                    .Concat(rmsFeature?.EmgVector ?? Enumerable.Empty<double>())
+                    .Concat(varFeature?.EmgVector ?? Enumerable.Empty<double>())
+                    .Concat(sscFeature?.EmgVector ?? Enumerable.Empty<double>())
+                    .Concat(mavFeature?.ImuVector ?? Enumerable.Empty<double>())
+                    .Concat(wlFeature?.ImuVector ?? Enumerable.Empty<double>())
+                    .Concat(rmsFeature?.ImuVector ?? Enumerable.Empty<double>())
+                    .Concat(varFeature?.ImuVector ?? Enumerable.Empty<double>())
+                    .Concat(sscFeature?.ImuVector ?? Enumerable.Empty<double>());
+
+                var featureTransposed = new FeatureTransposed
+                {
+                    PredictorValue = labels[featureGroup.KeyPair.GestureValue],
+                    FeatureVector = featureVector.ToArray()
+                };
+
+                result.Add(featureTransposed);
+            }
+
+            return result;
         }
 
         private void PopulateFeatureTypeFuncMappings()
@@ -58,6 +109,15 @@
                 { FeatureTypes.Variance, CalculateVariance },
                 { FeatureTypes.SlopeSignChange, CalculateSlopeSignChange }
             };
+        }
+
+        public Dictionary<string, int> EncodeCategoricalLabels(List<string> labels)
+        {
+            var result = new Dictionary<string, int>();
+
+            return labels.OrderBy(label => label)
+                .Select((label, idx) => new { Id = label, Value = idx })
+                .ToDictionary(label => label.Id, label => label.Value);
         }
 
         public double CalculateMeanValue(double[] emgSensorData)
@@ -118,5 +178,7 @@
 
             return result;
         }
+
+        
     }
 }

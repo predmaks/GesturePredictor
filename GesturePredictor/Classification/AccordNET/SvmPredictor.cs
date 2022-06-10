@@ -23,6 +23,8 @@ namespace GesturePredictor.Classification.AccordNET
 
         private string ModelFullPath => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), modelRelativePath);
 
+        public int? NumberOfFeatures { get; set; }
+
         //public MachineLearningAlgorithm Algorithm { get => MachineLearningAlgorithm.SupportVectorMachines; }
 
         public void CreateModel()
@@ -88,6 +90,27 @@ namespace GesturePredictor.Classification.AccordNET
         public void SaveModel()
         {
             machine.Save(ModelFullPath);
+        }
+
+        public TrainingData SplitForTraining(List<FeatureTransposed> features)
+        {
+            // TODO: move to separate ITrainier interface and class and do better random split
+            var result = new TrainingData();
+
+            // TODO 1: improve this to do really 70:30 or 60:40 in random way!!!
+            for (int i = 0; i < features.Count; i++)
+            {
+                if (i % 10 < 6)
+                {
+                    result.Training.Add(features.ElementAt(i));
+                }
+                else
+                {
+                    result.Validation.Add(features.ElementAt(i));
+                }
+            }
+
+            return result;
         }
     }
 }

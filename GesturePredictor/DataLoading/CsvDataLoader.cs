@@ -2,7 +2,7 @@
 {
     internal class CsvDataLoader : IDataLoader
     {
-        public IEnumerable<RawDataSnapshot> LoadData(string path)
+        public IEnumerable<RawDataSnapshot> LoadData(string path, int columnCount)
         {
             var result = new List<RawDataSnapshot>();
 
@@ -17,14 +17,10 @@
                 record.Timestamp = DateTime.Parse(columns[2]);
                 
                 record.SensorValues = new List<double>();
-                record.SensorValues.Add(Convert.ToDouble(columns[3]));
-                record.SensorValues.Add(Convert.ToDouble(columns[4]));
-                record.SensorValues.Add(Convert.ToDouble(columns[5]));
-                record.SensorValues.Add(Convert.ToDouble(columns[6]));
-                record.SensorValues.Add(Convert.ToDouble(columns[7]));
-                record.SensorValues.Add(Convert.ToDouble(columns[8]));
-                record.SensorValues.Add(Convert.ToDouble(columns[9]));
-                record.SensorValues.Add(Convert.ToDouble(columns[10]));
+                for (int i = 3; i < columnCount; i++)
+                {
+                    record.SensorValues.Add(Convert.ToDouble(columns[i]));
+                }
 
                 result.Add(record);
             }

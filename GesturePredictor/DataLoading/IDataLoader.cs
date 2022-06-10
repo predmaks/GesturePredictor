@@ -2,6 +2,6 @@
 {
     internal interface IDataLoader
     {
-        IEnumerable<RawDataSnapshot> LoadData(string path);
+        IEnumerable<RawDataSnapshot> LoadData(string path, int columnCount);
     }
 }
