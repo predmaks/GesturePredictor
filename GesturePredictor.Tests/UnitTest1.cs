@@ -64,15 +64,34 @@ namespace GesturePredictor.Tests
             var imuFeatures = ExtractFeatures(imuNormalizedData);
 
             var features = featureProcessor.MergeFeatures(emgFeatures, imuFeatures).ToList();
+            var trainingData = Helpers.SplitForTraining(features);
 
-            IPredictor predictor = new SvmPredictor();
-            var trainingData = predictor.SplitForTraining(features);
-            predictor.NumberOfFeatures = trainingData.TrainingInput[0].Length;
-            predictor.CreateModel();
-            predictor.StartTraining(trainingData.TrainingInput, trainingData.TrainingLabels);
-            var evaluationResult = predictor.EvaluateModel(trainingData.ValidationInput, trainingData.ValidationLabels);
-            var classificationError = evaluationResult.Item3 * 100;
+            // SVM
+            IPredictor svmPredictor = new SvmPredictor();
+            //svmPredictor.NumberOfFeatures = trainingData.TrainingInput[0].Length;
+            svmPredictor.CreateModel();
+            svmPredictor.StartTraining(trainingData.TrainingInput, trainingData.TrainingLabels);
+            var svmEvaluationResult = svmPredictor.EvaluateModel(trainingData.ValidationInput, trainingData.ValidationLabels);
+            var svmClassificationError = svmEvaluationResult.Item3 * 100;
+            Console.WriteLine($"SVM classification error: {svmClassificationError}");
 
+            // kNN
+            IPredictor knnPredictor = new KnnPredictor();
+            //knnPredictor.NumberOfFeatures = trainingData.TrainingInput[0].Length;
+            knnPredictor.CreateModel();
+            knnPredictor.StartTraining(trainingData.TrainingInput, trainingData.TrainingLabels);
+            var knnEvaluationResult = knnPredictor.EvaluateModel(trainingData.ValidationInput, trainingData.ValidationLabels);
+            var knnClassificationError = knnEvaluationResult.Item3 * 100;
+            Console.WriteLine($"kNN classification error: {knnClassificationError}");
+
+            // NaiveBayes
+            IPredictor naiveBayesPredictor = new NaiveBayesPredictor();
+            //naiveBayesPredictor.NumberOfFeatures = trainingData.TrainingInput[0].Length;
+            naiveBayesPredictor.CreateModel();
+            naiveBayesPredictor.StartTraining(trainingData.TrainingInput, trainingData.TrainingLabels);
+            var naiveBayesEvaluationResult = naiveBayesPredictor.EvaluateModel(trainingData.ValidationInput, trainingData.ValidationLabels);
+            var naiveBayesClassificationError = naiveBayesEvaluationResult.Item3 * 100;
+            Console.WriteLine($"NB classification error: {naiveBayesClassificationError}");
         }
 
         private IEnumerable<RawDataSnapshot> NormalizeData(IEnumerable<RawDataSnapshot> rawRecords)

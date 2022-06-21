@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GesturePredictor.Classification;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -54,6 +55,27 @@ namespace GesturePredictor
 
             // 4. Take and return the square root of the squared differences Mean value
             return Convert.ToInt32(Math.Sqrt(squaredDifferencesMean));
+        }
+
+        public static TrainingData SplitForTraining(List<FeatureTransposed> features)
+        {
+            // TODO: move to separate ITrainier interface and class and do better random split
+            var result = new TrainingData();
+
+            // TODO 1: improve this to do really 70:30 or 60:40 in random way!!!
+            for (int i = 0; i < features.Count; i++)
+            {
+                if (i % 10 < 6)
+                {
+                    result.Training.Add(features.ElementAt(i));
+                }
+                else
+                {
+                    result.Validation.Add(features.ElementAt(i));
+                }
+            }
+
+            return result;
         }
     }
 }
