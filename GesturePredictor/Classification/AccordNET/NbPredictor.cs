@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GesturePredictor.Classification.AccordNET
 {
-    public class NaiveBayesPredictor : IPredictor
+    public class NbPredictor : IPredictor
     {
         private double[][] input;
         private int[] output;

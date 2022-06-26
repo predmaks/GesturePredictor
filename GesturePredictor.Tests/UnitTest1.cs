@@ -64,7 +64,31 @@ namespace GesturePredictor.Tests
             var imuFeatures = ExtractFeatures(imuNormalizedData);
 
             var features = featureProcessor.MergeFeatures(emgFeatures, imuFeatures).ToList();
+
+            //-
+            foreach (var feature in features.Take(7))
+            {
+                var featureVector = string.Join("\t", feature.FeatureVector.Select(d => d.ToString("F2")));
+                Console.WriteLine(featureVector, $"{feature.PredictorValue} |\t{featureVector}\r\n");
+            }
+            //-
+
+            return;
+
             var trainingData = Helpers.SplitForTraining(features);
+
+            //-
+            foreach (var outer in trainingData.TrainingInput)
+            {
+                Console.WriteLine();
+                foreach(var inner in outer)
+                {
+                    Console.Write(inner);
+                }
+            }
+            
+            return;
+            //-
 
             // SVM
             IPredictor svmPredictor = new SvmPredictor();
@@ -73,7 +97,7 @@ namespace GesturePredictor.Tests
             svmPredictor.StartTraining(trainingData.TrainingInput, trainingData.TrainingLabels);
             var svmEvaluationResult = svmPredictor.EvaluateModel(trainingData.ValidationInput, trainingData.ValidationLabels);
             var svmClassificationError = svmEvaluationResult.Item3 * 100;
-            Console.WriteLine($"SVM classification error: {svmClassificationError}");
+            Console.WriteLine($"SVM evaluation error: {svmClassificationError}%");
 
             // kNN
             IPredictor knnPredictor = new KnnPredictor();
@@ -82,16 +106,34 @@ namespace GesturePredictor.Tests
             knnPredictor.StartTraining(trainingData.TrainingInput, trainingData.TrainingLabels);
             var knnEvaluationResult = knnPredictor.EvaluateModel(trainingData.ValidationInput, trainingData.ValidationLabels);
             var knnClassificationError = knnEvaluationResult.Item3 * 100;
-            Console.WriteLine($"kNN classification error: {knnClassificationError}");
+            Console.WriteLine($"kNN evaluation error: {knnClassificationError}%");
 
             // NaiveBayes
-            IPredictor naiveBayesPredictor = new NaiveBayesPredictor();
+            IPredictor naiveBayesPredictor = new NbPredictor();
             //naiveBayesPredictor.NumberOfFeatures = trainingData.TrainingInput[0].Length;
             naiveBayesPredictor.CreateModel();
             naiveBayesPredictor.StartTraining(trainingData.TrainingInput, trainingData.TrainingLabels);
             var naiveBayesEvaluationResult = naiveBayesPredictor.EvaluateModel(trainingData.ValidationInput, trainingData.ValidationLabels);
             var naiveBayesClassificationError = naiveBayesEvaluationResult.Item3 * 100;
-            Console.WriteLine($"NB classification error: {naiveBayesClassificationError}");
+            Console.WriteLine($"NB evaluation error: {naiveBayesClassificationError}%");
+
+            // DBN
+            IPredictor dbnPredictor = new DbnPredictor();
+            dbnPredictor.NumberOfFeatures = trainingData.TrainingInput[0].Length;
+            dbnPredictor.CreateModel();
+            dbnPredictor.StartTraining(trainingData.TrainingInput, trainingData.TrainingLabels);
+            var dbnEvaluationResult = dbnPredictor.EvaluateModel(trainingData.ValidationInput, trainingData.ValidationLabels);
+            var dbnClassificationError = dbnEvaluationResult.Item3 * 100;
+            Console.WriteLine($"DBN evaluation error: {dbnClassificationError}%");
+
+            // HMM
+            IPredictor hmmPredictor = new HmmPredictor();
+            hmmPredictor.NumberOfFeatures = trainingData.TrainingInput[0].Length;
+            hmmPredictor.CreateModel();
+            hmmPredictor.StartTraining(trainingData.TrainingInput, trainingData.TrainingLabels);
+            var hmmEvaluationResult = hmmPredictor.EvaluateModel(trainingData.ValidationInput, trainingData.ValidationLabels);
+            var hmmClassificationError = hmmEvaluationResult.Item3 * 100;
+            Console.WriteLine($"HMM evaluation error: {hmmClassificationError}%");
         }
 
         private IEnumerable<RawDataSnapshot> NormalizeData(IEnumerable<RawDataSnapshot> rawRecords)

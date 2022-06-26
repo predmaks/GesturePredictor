@@ -10,6 +10,9 @@ namespace GesturePredictor
 {
     internal static class Helpers
     {
+        public const int NumberOfClasses = 6;
+        public const int NumberOfFeatures = 90; // 40 EMG (8 x 5) and 50 IMU (10 x 5) features 
+
         /*public static Dictionary<string, int> GetColumns(Type t)
         {
             var _dict = new Dictionary<string, int>();
