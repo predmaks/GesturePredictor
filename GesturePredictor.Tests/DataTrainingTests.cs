@@ -21,7 +21,7 @@ namespace GesturePredictor.Tests
         public DataTrainingTests()
         {
             featureProcessor = new FeatureProcessor();
-            var rootFolder = "D:/a/1/a";
+            var rootFolder = "D:/a/1/a/TestFiles";
             var subfolder = "6Words1980Samples";
             /*
 #if !DEBUG
