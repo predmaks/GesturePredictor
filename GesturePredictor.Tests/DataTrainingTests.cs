@@ -10,23 +10,23 @@ using System.Linq;
 namespace GesturePredictor.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class DataTrainingTests
     {
         private FeatureProcessor featureProcessor;
 
-        public UnitTest1()
+        public DataTrainingTests()
         {
             featureProcessor = new FeatureProcessor();
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void Test_Extract_EMG_Features_FeaturesExtracted()
         {
             IDataLoader csvLoader = new CsvDataLoader();
-            var emgRawRecords = csvLoader.LoadData("C:/Temp/emg_training_data.csv", 11);
+            var emgRawRecords = csvLoader.LoadData("TestFiles/6Words1980Samples/emg_training_data.csv", 11);
             Assert.IsTrue(emgRawRecords.Count() > 0);
 
-            var emgNormalizedData = NormalizeData(emgRawRecords);
+            var emgNormalizedData = PreProcessData(emgRawRecords, 50);
             Assert.IsTrue(emgNormalizedData.Count() > 0);
 
             var features = ExtractFeatures(emgNormalizedData);
@@ -34,14 +34,14 @@ namespace GesturePredictor.Tests
         }
 
         [TestMethod]
-        public void Test_ProcessImuRawData_FeaturesExtracted()
+        public void Test_Extract_IMU_Features_FeaturesExtracted()
         {
             IDataLoader csvLoader = new CsvDataLoader();
 
-            var imuRawRecords = csvLoader.LoadData("C:/Temp/imu_training_data.csv", 13);
+            var imuRawRecords = csvLoader.LoadData("TestFiles/6Words1980Samples/imu_training_data.csv", 13);
             Assert.IsTrue(imuRawRecords.Count() > 0);
 
-            var imuNormalizedData = NormalizeData(imuRawRecords);
+            var imuNormalizedData = PreProcessData(imuRawRecords, 10);
             Assert.IsTrue(imuNormalizedData.Count() > 0);
 
             var features = ExtractFeatures(imuNormalizedData);
@@ -54,41 +54,24 @@ namespace GesturePredictor.Tests
             IDataLoader csvLoader = new CsvDataLoader();
 
             // EMG data
-            var emgRawRecords = csvLoader.LoadData("C:/Temp/emg_training_data.csv", 11);
-            var emgNormalizedData = NormalizeData(emgRawRecords);
+            var emgRawRecords = csvLoader.LoadData("TestFiles/6Words1980Samples/emg_training_data.csv", 11);
+            var emgNormalizedData = PreProcessData(emgRawRecords, 50); // 250 ms interval
             var emgFeatures = ExtractFeatures(emgNormalizedData);
 
             // IMU data
-            var imuRawRecords = csvLoader.LoadData("C:/Temp/imu_training_data.csv", 13);
-            var imuNormalizedData = NormalizeData(imuRawRecords);
+            var imuRawRecords = csvLoader.LoadData("TestFiles/6Words1980Samples/imu_training_data.csv", 13);
+            var imuNormalizedData = PreProcessData(imuRawRecords, 10); // 200 ms interval
             var imuFeatures = ExtractFeatures(imuNormalizedData);
 
             var features = featureProcessor.MergeFeatures(emgFeatures, imuFeatures).ToList();
 
-            //-
             foreach (var feature in features.Take(7))
             {
                 var featureVector = string.Join("\t", feature.FeatureVector.Select(d => d.ToString("F2")));
                 Console.WriteLine(featureVector, $"{feature.PredictorValue} |\t{featureVector}\r\n");
             }
-            //-
-
-            return;
 
             var trainingData = Helpers.SplitForTraining(features);
-
-            //-
-            foreach (var outer in trainingData.TrainingInput)
-            {
-                Console.WriteLine();
-                foreach(var inner in outer)
-                {
-                    Console.Write(inner);
-                }
-            }
-            
-            return;
-            //-
 
             // SVM
             IPredictor svmPredictor = new SvmPredictor();
@@ -136,13 +119,13 @@ namespace GesturePredictor.Tests
             Console.WriteLine($"HMM evaluation error: {hmmClassificationError}%");
         }
 
-        private IEnumerable<RawDataSnapshot> NormalizeData(IEnumerable<RawDataSnapshot> rawRecords)
+        private IEnumerable<RawDataSnapshot> PreProcessData(IEnumerable<RawDataSnapshot> rawRecords, int windowSize)
         {
             var preProcessor = new PreProcessor();
 
             var rectifiedData = preProcessor.RectifyData(rawRecords);
-            var smoothedData = preProcessor.SmoothData(rectifiedData);
-            var activeSegments = preProcessor.ExtractActiveSegments(smoothedData);
+            var smoothedData = preProcessor.SmoothData(rectifiedData, windowSize);
+            var activeSegments = preProcessor.ExtractActiveSegments(smoothedData, windowSize);
 
             return preProcessor.NormalizeData(activeSegments);
         }

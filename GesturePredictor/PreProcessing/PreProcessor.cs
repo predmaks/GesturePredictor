@@ -42,9 +42,9 @@
             }
         }*/
 
-        public IEnumerable<RawDataSnapshot> SmoothData(IEnumerable<RawDataSnapshot> input)
+        public IEnumerable<RawDataSnapshot> SmoothData(IEnumerable<RawDataSnapshot> input, int windowSize)
         {
-            var windowSize = 50; // TODO: move to config
+            //var windowSize = 50; // TODO: move to config
             var result = new List<RawDataSnapshot>();
 
             var sensorCount = input.ElementAt(0).SensorValues.Count;
@@ -166,9 +166,9 @@
             }
         }
 
-        public IEnumerable<RawDataSnapshot> ExtractActiveSegments(IEnumerable<RawDataSnapshot> input)
+        public IEnumerable<RawDataSnapshot> ExtractActiveSegments(IEnumerable<RawDataSnapshot> input, int windowSize)
         {
-            var windowSize = 50; // 250ms interval
+            //var windowSize = 50; // 250ms interval
             var result = new List<RawDataSnapshot>();
 
             var gesturesGrouped = input.GroupBy(
