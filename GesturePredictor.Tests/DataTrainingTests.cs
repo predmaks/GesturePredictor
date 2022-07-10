@@ -23,7 +23,7 @@ namespace GesturePredictor.Tests
         public void Test_Extract_EMG_Features_FeaturesExtracted()
         {
             IDataLoader csvLoader = new CsvDataLoader();
-            var emgRawRecords = csvLoader.LoadData("TestFiles/6Words1980Samples/emg_training_data.csv", 11);
+            var emgRawRecords = csvLoader.LoadData("../../../../TestFiles/6Words1980Samples/emg_training_data.csv", 11);
             Assert.IsTrue(emgRawRecords.Count() > 0);
 
             var emgNormalizedData = PreProcessData(emgRawRecords, 50);
@@ -38,7 +38,7 @@ namespace GesturePredictor.Tests
         {
             IDataLoader csvLoader = new CsvDataLoader();
 
-            var imuRawRecords = csvLoader.LoadData("TestFiles/6Words1980Samples/imu_training_data.csv", 13);
+            var imuRawRecords = csvLoader.LoadData("../../../../TestFiles/6Words1980Samples/imu_training_data.csv", 13);
             Assert.IsTrue(imuRawRecords.Count() > 0);
 
             var imuNormalizedData = PreProcessData(imuRawRecords, 10);
@@ -54,12 +54,12 @@ namespace GesturePredictor.Tests
             IDataLoader csvLoader = new CsvDataLoader();
 
             // EMG data
-            var emgRawRecords = csvLoader.LoadData("TestFiles/6Words1980Samples/emg_training_data.csv", 11);
+            var emgRawRecords = csvLoader.LoadData("../../../../TestFiles/6Words1980Samples/emg_training_data.csv", 11);
             var emgNormalizedData = PreProcessData(emgRawRecords, 50); // 250 ms interval
             var emgFeatures = ExtractFeatures(emgNormalizedData);
 
             // IMU data
-            var imuRawRecords = csvLoader.LoadData("TestFiles/6Words1980Samples/imu_training_data.csv", 13);
+            var imuRawRecords = csvLoader.LoadData("../../../../TestFiles/6Words1980Samples/imu_training_data.csv", 13);
             var imuNormalizedData = PreProcessData(imuRawRecords, 10); // 200 ms interval
             var imuFeatures = ExtractFeatures(imuNormalizedData);
 
