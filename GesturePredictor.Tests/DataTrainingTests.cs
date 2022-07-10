@@ -21,8 +21,9 @@ namespace GesturePredictor.Tests
         public DataTrainingTests()
         {
             featureProcessor = new FeatureProcessor();
-            var rootFolder = "C:/Temp";
+            var rootFolder = "D:/a/1/a";
             var subfolder = "6Words1980Samples";
+            /*
 #if !DEBUG
             string configFile = $"{Assembly.GetExecutingAssembly().Location}.config";
             string outputConfigFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).FilePath;
@@ -30,6 +31,7 @@ namespace GesturePredictor.Tests
 
             rootFolder = ConfigurationManager.AppSettings["TestDatasetsFolder"];
 #endif
+            */
             emgTestFilePath = $"{rootFolder}/{subfolder}/emg_training_data.csv";
             imuTestFilePath = $"{rootFolder}/{subfolder}/imu_training_data.csv";
         }
