@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GesturePredictor
 {
-    internal interface IClassificationModel
+    public interface IClassificationModel
     {
         public void Create();
         public void Load<TInput>(string filePath);

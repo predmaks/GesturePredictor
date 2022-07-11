@@ -10,7 +10,7 @@
             PopulateFeatureTypeFuncMappings();
         }
 
-        public IEnumerable<FeatureRecord> ExtractFeatures(IEnumerable<RawDataSnapshot> input, List<FeatureTypes> featureTypes)
+        public IEnumerable<FeatureRecord> ExtractFeatures(IEnumerable<GestureDataSnapshot> input, List<FeatureTypes> featureTypes)
         {
             var normalizedDataGrouped = input.GroupBy(
                 emg => (emg.GestureId, emg.GestureValue), (key, g) => new { Gesture = key, Records = g.ToList() });

@@ -1,9 +1,9 @@
-﻿using Microsoft.ML;
-using Microsoft.ML.Data;
+﻿//using Microsoft.ML;
+//using Microsoft.ML.Data;
 
 namespace GesturePredictor
 {
-    public class Class1
+    internal class MicrosoftMLTest
     {
         void Test()
         {
@@ -43,12 +43,12 @@ namespace GesturePredictor
         }
     }
 
-    public enum DataLoaderType
+    internal enum DataLoaderType
     {
         CsvFileLoader
     }
 
-    public interface IModelBuilder
+    internal interface IModelBuilder
     {
         //IDataLoader WithRawDataLoader(DataLoaderType loaderType);
         DataModel Build();
@@ -102,15 +102,15 @@ namespace GesturePredictor
 
     public class ModelInput
     {
-        [LoadColumn(2)]
+        //[LoadColumn(2)]
         public float PassengerCount;
-        [LoadColumn(3)]
+        //[LoadColumn(3)]
         public float TripTime;
-        [LoadColumn(4)]
+        //[LoadColumn(4)]
         public float TripDistance;
-        [LoadColumn(5)]
+        //[LoadColumn(5)]
         public string PaymentType;
-        [LoadColumn(6)]
+        //[LoadColumn(6)]
         public float FareAmount;
     }
 }

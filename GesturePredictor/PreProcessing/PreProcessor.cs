@@ -1,13 +1,13 @@
 ﻿namespace GesturePredictor.PreProcessing
 {
-    internal class PreProcessor : IPreProcessor
+    public class PreProcessor : IPreProcessor
     {
-        public IEnumerable<RawDataSnapshot> RectifyData(IEnumerable<RawDataSnapshot> input)
+        public IEnumerable<GestureDataSnapshot> RectifyData(IEnumerable<GestureDataSnapshot> input)
         {
             try
             {
                 return input.Select(
-                        r => new RawDataSnapshot
+                        r => new GestureDataSnapshot
                         {
                             GestureId = r.GestureId,
                             Timestamp = r.Timestamp,
@@ -42,10 +42,10 @@
             }
         }*/
 
-        public IEnumerable<RawDataSnapshot> SmoothData(IEnumerable<RawDataSnapshot> input, int windowSize)
+        public IEnumerable<GestureDataSnapshot> SmoothData(IEnumerable<GestureDataSnapshot> input, int windowSize)
         {
             //var windowSize = 50; // TODO: move to config
-            var result = new List<RawDataSnapshot>();
+            var result = new List<GestureDataSnapshot>();
 
             var sensorCount = input.ElementAt(0).SensorValues.Count;
 
@@ -82,7 +82,7 @@
                         sensorSums[sensorIndex] /= windowSize;
                     }
 
-                    result.Add(new RawDataSnapshot
+                    result.Add(new GestureDataSnapshot
                     {
                         Timestamp = baseRectifiedRecord.Timestamp,
                         GestureId = baseRectifiedRecord.GestureId,
@@ -95,11 +95,11 @@
             return result;
         }
 
-        public IEnumerable<RawDataSnapshot> NormalizeData(IEnumerable<RawDataSnapshot> input)
+        public IEnumerable<GestureDataSnapshot> NormalizeData(IEnumerable<GestureDataSnapshot> input)
         {
             try
             {
-                var result = new List<RawDataSnapshot>();
+                var result = new List<GestureDataSnapshot>();
 
                 var sensorCount = input.ElementAt(0).SensorValues.Count;
 
@@ -117,7 +117,7 @@
 
                     foreach (var record in gesture.Records)
                     {
-                        var dataSnapshot = new RawDataSnapshot
+                        var dataSnapshot = new GestureDataSnapshot
                         {
                             GestureId = record.GestureId,
                             GestureValue = record.GestureValue,
@@ -166,10 +166,10 @@
             }
         }
 
-        public IEnumerable<RawDataSnapshot> ExtractActiveSegments(IEnumerable<RawDataSnapshot> input, int windowSize)
+        public IEnumerable<GestureDataSnapshot> ExtractActiveSegments(IEnumerable<GestureDataSnapshot> input, int windowSize)
         {
             //var windowSize = 50; // 250ms interval
-            var result = new List<RawDataSnapshot>();
+            var result = new List<GestureDataSnapshot>();
 
             var gesturesGrouped = input.GroupBy(
                 emg => emg.GestureId, (key, g) => new { GestureId = key, Records = g.ToList() });

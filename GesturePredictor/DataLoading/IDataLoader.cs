@@ -1,7 +1,7 @@
 ﻿namespace GesturePredictor.DataLoading
 {
-    internal interface IDataLoader
+    public interface IDataLoader
     {
-        IEnumerable<RawDataSnapshot> LoadData(string path, int columnCount);
+        IEnumerable<GestureDataSnapshot> LoadData(string path, int columnCount);
     }
 }

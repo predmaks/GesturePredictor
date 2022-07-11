@@ -8,7 +8,7 @@ namespace GesturePredictor.FeatureProcessing
 {
     public interface IFeatureProcessor
     {
-        IEnumerable<FeatureRecord> ExtractFeatures(IEnumerable<RawDataSnapshot> input, List<FeatureTypes> featureTypes);
+        IEnumerable<FeatureRecord> ExtractFeatures(IEnumerable<GestureDataSnapshot> input, List<FeatureTypes> featureTypes);
         IEnumerable<FeatureTransposed> MergeFeatures(IEnumerable<FeatureRecord> input1, IEnumerable<FeatureRecord> input2);
     }
 }

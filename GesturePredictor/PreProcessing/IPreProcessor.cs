@@ -2,9 +2,9 @@
 {
     public interface IPreProcessor
     {
-        IEnumerable<RawDataSnapshot> RectifyData(IEnumerable<RawDataSnapshot> input);
-        IEnumerable<RawDataSnapshot> SmoothData(IEnumerable<RawDataSnapshot> input, int windowSize);
-        IEnumerable<RawDataSnapshot> NormalizeData(IEnumerable<RawDataSnapshot> input);
-        IEnumerable<RawDataSnapshot> ExtractActiveSegments(IEnumerable<RawDataSnapshot> input, int windowSize);
+        IEnumerable<GestureDataSnapshot> RectifyData(IEnumerable<GestureDataSnapshot> input);
+        IEnumerable<GestureDataSnapshot> SmoothData(IEnumerable<GestureDataSnapshot> input, int windowSize);
+        IEnumerable<GestureDataSnapshot> NormalizeData(IEnumerable<GestureDataSnapshot> input);
+        IEnumerable<GestureDataSnapshot> ExtractActiveSegments(IEnumerable<GestureDataSnapshot> input, int windowSize);
     }
 }

@@ -1,15 +1,15 @@
 ﻿namespace GesturePredictor.DataLoading
 {
-    internal class CsvDataLoader : IDataLoader
+    public class CsvDataLoader : IDataLoader
     {
-        public IEnumerable<RawDataSnapshot> LoadData(string path, int columnCount)
+        public IEnumerable<GestureDataSnapshot> LoadData(string path, int columnCount)
         {
-            var result = new List<RawDataSnapshot>();
+            var result = new List<GestureDataSnapshot>();
 
             string[] lines = File.ReadAllLines(path);
             foreach (string line in lines)
             {
-                var record = new RawDataSnapshot();
+                var record = new GestureDataSnapshot();
                 
                 string[] columns = line.Split(',');
                 record.GestureId = Convert.ToInt32(columns[0]);

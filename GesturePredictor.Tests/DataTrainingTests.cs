@@ -136,7 +136,7 @@ namespace GesturePredictor.Tests
             Console.WriteLine($"HMM evaluation error: {hmmClassificationError}%");
         }
 
-        private IEnumerable<RawDataSnapshot> PreProcessData(IEnumerable<RawDataSnapshot> rawRecords, int windowSize)
+        private IEnumerable<GestureDataSnapshot> PreProcessData(IEnumerable<GestureDataSnapshot> rawRecords, int windowSize)
         {
             var preProcessor = new PreProcessor();
 
@@ -147,7 +147,7 @@ namespace GesturePredictor.Tests
             return preProcessor.NormalizeData(activeSegments);
         }
 
-        private IEnumerable<FeatureRecord> ExtractFeatures(IEnumerable<RawDataSnapshot> normalizedRecords)
+        private IEnumerable<FeatureRecord> ExtractFeatures(IEnumerable<GestureDataSnapshot> normalizedRecords)
         {
             var allFeatureTypes = Enum.GetValues(
                         typeof(FeatureTypes)).Cast<FeatureTypes>().ToList();
