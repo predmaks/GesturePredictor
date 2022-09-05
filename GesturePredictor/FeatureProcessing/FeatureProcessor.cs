@@ -120,45 +120,45 @@
                 .ToDictionary(label => label.Id, label => label.Value);
         }
 
-        public double CalculateMeanValue(double[] emgSensorData)
+        public double CalculateMeanValue(double[] sensorData)
         {
-            return emgSensorData.Average();
+            return sensorData.Average();
         }
 
-        public double CalculateWaveformLength(double[] emgSensorData)
+        public double CalculateWaveformLength(double[] sensorData)
         {
             double result = 0;
 
-            for (int i = 0; i < emgSensorData.Length - 1; i++)
+            for (int i = 0; i < sensorData.Length - 1; i++)
             {
-                result += Math.Abs(emgSensorData[i + 1] - emgSensorData[i]);
+                result += Math.Abs(sensorData[i + 1] - sensorData[i]);
             }
 
             return result;
         }
 
-        public double CalculateRootMeanSquare(double[] emgSensorData)
+        public double CalculateRootMeanSquare(double[] sensorData)
         {
-            double squaresSum = GetSquaresSum(emgSensorData);
+            double squaresSum = GetSquaresSum(sensorData);
 
-            return Math.Sqrt(squaresSum / emgSensorData.Count());
+            return Math.Sqrt(squaresSum / sensorData.Count());
         }
 
-        public double CalculateVariance(double[] emgSensorData)
+        public double CalculateVariance(double[] sensorData)
         {
-            double squaresSum = GetSquaresSum(emgSensorData);
+            double squaresSum = GetSquaresSum(sensorData);
 
-            return squaresSum / (emgSensorData.Count() - 1);
+            return squaresSum / (sensorData.Count() - 1);
         }
 
-        public double CalculateSlopeSignChange(double[] emgSensorData)
+        public double CalculateSlopeSignChange(double[] sensorData)
         {
             double result = 0;
 
-            for (int i = 2; i < emgSensorData.Length - 2; i++)
+            for (int i = 2; i < sensorData.Length - 2; i++)
             {
-                if ((emgSensorData[i] < emgSensorData[i - 1] && emgSensorData[i] < emgSensorData[i + 1]) ||
-                    (emgSensorData[i] > emgSensorData[i - 1] && emgSensorData[i] > emgSensorData[i + 1]))
+                if ((sensorData[i] < sensorData[i - 1] && sensorData[i] < sensorData[i + 1]) ||
+                    (sensorData[i] > sensorData[i - 1] && sensorData[i] > sensorData[i + 1]))
                 {
                     result += 1;
                 }

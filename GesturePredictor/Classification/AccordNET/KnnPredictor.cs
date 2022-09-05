@@ -1,5 +1,7 @@
 ﻿using Accord.IO;
 using Accord.MachineLearning;
+using Accord.Math;
+using Accord.Math.Distances;
 using Accord.Math.Optimization.Losses;
 using Accord.Statistics.Analysis;
 using System;
@@ -25,7 +27,7 @@ namespace GesturePredictor.Classification.AccordNET
 
         public void CreateModel()
         {
-            knn = new KNearestNeighbors(k: 5);
+            knn = new KNearestNeighbors(k: 5, distance: new Manhattan());
         }
 
         public void StartTraining(double[][] input, int[] output)

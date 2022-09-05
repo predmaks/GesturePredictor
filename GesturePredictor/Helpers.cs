@@ -68,7 +68,7 @@ namespace GesturePredictor
             // TODO 1: improve this to do really 70:30 or 60:40 in random way!!!
             for (int i = 0; i < features.Count; i++)
             {
-                if (i % 10 < 6)
+                if (i % 10 < 7)
                 {
                     result.Training.Add(features.ElementAt(i));
                 }

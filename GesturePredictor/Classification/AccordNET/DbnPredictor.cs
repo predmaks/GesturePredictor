@@ -34,7 +34,7 @@ namespace GesturePredictor.Classification.AccordNET
             if (!NumberOfFeatures.HasValue)
                 throw new Exception("The number of input features needs to be set before creating model!");
 
-            network = new DeepBeliefNetwork(new BernoulliFunction(), NumberOfFeatures.Value, 22, Helpers.NumberOfClasses);
+            network = new DeepBeliefNetwork(new BernoulliFunction(), NumberOfFeatures.Value, 48, Helpers.NumberOfClasses);
 
             teacher = new BackPropagationLearning(network)
             {
