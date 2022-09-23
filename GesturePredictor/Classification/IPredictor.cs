@@ -17,5 +17,6 @@ namespace GesturePredictor.Classification
         Tuple<int[], double[], double> EvaluateModel(double[][] input, int[] output);
         int Predict(double[] input);
         void CreateModel();
+        void LoadModel();
     }
 }
