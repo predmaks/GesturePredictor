@@ -1,5 +1,9 @@
 # Introduction 
-Gesture Predictor library is a reusable .NET component for recognizing characters from Serbian Sign Language (SSL), relying on non-invasive, sensor-based approach for gesture recognition. The purpose of the project was implementation of the reusable NuGet component for SSL gesture recognition, but it could also serve more generic gesture recognition and be used by developers in various gesture recognition projects and scenarios. Validation of the library was done using pre-selected gestures from Serbian Sign Language, electromyography approach, and a dataset previously created with the help of Myo gesture capturing armband.
+Gesture Predictor library is a reusable .NET component for recognizing characters from Serbian Sign Language (SSL), relying on non-invasive, sensor-based approach for gesture recognition.
+
+The purpose of the project was implementation of the reusable NuGet component for SSL gesture recognition, but it could also serve more generic gesture recognition and be used by developers in various gesture recognition projects and scenarios.
+
+Validation of the library was done using pre-selected gestures from SSL, electromyography approach, and a dataset previously created with the help of Myo gesture capturing armband.
 
 # Getting Started
 TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
